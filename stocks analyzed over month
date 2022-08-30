@@ -1,0 +1,16 @@
+private int solve(int[] A, int k){
+    int ans = 0;
+    var map = new HashMap<Integer, Integer>();
+    for (int i = 0, sum = 0; i < A.length; i++){
+        map.merge(A[i], 1, Integer::sum);
+        sum += A[i];
+        if (i >= k && map.merge(A[i-k], -1, Integer::sum) == 0){
+            map.remove(A[i-k]);
+            sum -= A[i-k];
+        }
+        if (i >= k-1 && map.size() == k){
+            ans = Math.max(ans, sum);
+        }
+    }
+    return ans;
+}
