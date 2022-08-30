@@ -1,0 +1,52 @@
+struct Range {
+    int start;
+    int end;
+    
+    vector<int> dp;
+    int badStrings;
+    
+    Range(int st, int ed) {
+        start = st;
+        end = ed;
+        dp.resize(26,0);
+        badStrings = 0;
+    }
+    
+    void addCharacter(char & ch ) {
+        if( dp[ch-'a']++ == 1 ) badStrings++;
+    }
+    
+    bool removeCharacter( int idx, char & ch ) {
+        if( idx < start || idx > end ) return badStrings == 0;
+        
+        if( dp[ch-'a']-- == 2 ) badStrings--;
+        
+        return badStrings == 0;
+    }
+};
+
+int goodString(int N, int Q, string str, vector<int> arr, vector<vector<int>> ranges) {
+    vector<Range> rn;
+
+    for( vector<int> range : ranges) {
+        Range newRange(range[0], range[1]);
+        
+        for( int i = range[0]-1; i < range[1]; ++i ) {
+            newRange.addCharacter(str[i]);
+        }
+        
+        rn.emplace_back(newRange);
+    }
+    
+    for( int i = 0; i < N; ++i ) {
+        bool allGoodString = true;
+        
+        for( Range & range: rn) {
+            allGoodString &= range.removeCharacter(arr[i], str[arr[i]-1]);
+        }
+        
+        if ( allGoodString ) return i+1;
+    }
+    
+    return N;
+}
