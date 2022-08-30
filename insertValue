@@ -1,0 +1,85 @@
+
+
+
+
+
+
+
+
+
+private static class Amazon {
+        int m, n, id, numOfIslands;
+        int[][] grid;
+        UF uf;
+        private Amazon(int[][] grid){
+            this.grid = grid;
+            m = grid.length; n = grid[0].length;
+            uf = new UF(m*n);
+            for (int i = 0 ; i < m; i++){
+                for (int j = 0; j < n; j++){
+                    if (grid[i][j] == 1 && uf.ids[getPosition(i, j)] == 0){
+                        numOfIslands++;
+                        dfs(i, j, ++id, getPosition(i, j), grid, uf);
+                    }
+                }
+            }
+        }
+
+        private int query(int[] insertVal){ // this is the main function we care about
+            int x = insertVal[0], y = insertVal[1], p = getPosition(x, y);
+            if (grid[x][y]==1){
+                return numOfIslands;
+            }
+            uf.ids[p]=++id;
+            Set<Integer> seen = new HashSet<>();
+            seen.add(uf.union(p, getPosition(x-1, y)));
+            seen.add(uf.union(p, getPosition(x+1, y)));
+            seen.add(uf.union(p, getPosition(x, y+1)));
+            seen.add(uf.union(p, getPosition(x, y-1)));
+            seen.remove(-1);
+            numOfIslands += 1 - seen.size();
+            return numOfIslands;
+        }
+
+        private int getPosition(int x, int y){ // get 1D position of a 2D position.
+            return x < 0 || y < 0 || x == m || y == n? -1 : x*n+y;
+        }
+
+        private void dfs(int i, int j, int id, int wh, int[][] grid, UF uf){ // init the grid for unionFind
+            int p = getPosition(i, j);
+            if (p == -1 || grid[i][j] == 0 || uf.ids[p] > 0){
+                return;
+            }
+            uf.ids[p]=id;
+            uf.union(p, wh);
+            dfs(i+1, j, id, p, grid, uf);
+            dfs(i-1, j, id, p, grid, uf);
+            dfs(i, j+1, id, p, grid, uf);
+            dfs(i, j-1, id, p, grid, uf);
+        }
+
+        private static class UF{
+            int[] parent;
+            int[] ids;
+            UF(int n){
+                ids = new int[n];
+                parent = IntStream.range(0, n).toArray();
+            }
+
+            int find(int x){
+                return x == parent[x]? x : (parent[x]=find(parent[x]));
+            }
+
+            int union(int x, int y){
+                if (y == -1){ // out of bound
+                    return -1;
+                }
+                x = find(x); y = find(y);
+                if (ids[y]==0||x==y){ // water or connected
+                    return -1;
+                }
+                parent[y]=x; // make x, the insertion point, the root.
+                return ids[y];
+            }
+        }
+    }
