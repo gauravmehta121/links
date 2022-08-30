@@ -1,0 +1,9 @@
+def solve(k, arr):
+    res = [0]
+    for j in arr:
+        temp = list(res)
+        for w in temp:
+            heappush(res, w+j)
+            if len(res) > k:
+                heappop(res)
+    return sorted(list(res), reverse=True)
