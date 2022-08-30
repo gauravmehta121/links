@@ -1,0 +1,32 @@
+// first sort in increasing order
+		Arrays.sort(nums);
+		// then find the max-abs-diff elements in order
+		// nums[i] and nums[i-1]
+		int maxDiff = Integer.MIN_VALUE;
+		for(int i = 1; i<nums.length; i++) {
+			if(maxDiff<nums[i]-nums[i-1]) {
+				maxDiff = nums[i]-nums[i-1];
+			}
+		}
+		int s = -1;
+		for(s = 1; s<nums.length; s++) {
+			if(maxDiff==nums[s]-nums[s-1]) {
+				break;
+			}
+		}
+		// split the array and find two medians respectively
+		int[] sub1 = Arrays.copyOfRange(nums, 0, s);
+		int[] sub2 = Arrays.copyOfRange(nums, s, nums.length);
+		int len1 = sub1.length, len2 = sub2.length;
+		int median1 = (len1%2==0)?(sub1[len1/2]+sub1[len1/2-1])/2:sub1[len1/2];
+		int median2 = (len2%2==0)?(sub2[len2/2]+sub2[len2/2-1])/2:sub2[len2/2];
+		System.out.println("median are:  "+median1 + ", "+median2);
+		int res = 0;
+		for(int i = 0; i<len1; i++) {
+			res += Math.abs(sub1[i]-median1);
+		}
+		for(int i = 0; i<len2; i++) {
+			res += Math.abs(sub2[i]-median2);
+		}
+		return res;
+	}
