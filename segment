@@ -1,0 +1,113 @@
+// "static void main" must be defined in a public class.
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(
+            numOfSegmentsWithMaxDiffAtMostK(new int[] {4, 2, 1, 5, 2}, 3)
+        );
+        
+        System.out.println(
+            numOfSegmentsWithMaxDiffAtMostK(new int[] {4, 2, 1, 5, 2}, 1)
+        );
+        
+        System.out.println(
+            numOfSegmentsWithMaxDiffAtMostK(new int[] {4, 2, 1, 5, 2}, 5)
+        );
+        
+        System.out.println(
+            numOfSegmentsWithMaxDiffAtMostK(new int[] {1, 3, 6}, 3)
+        );
+    }
+    
+    /*
+        Intution:
+        given an array of weights "weights",
+        we need to find the # of segments where the max difference in each segment is at most k.
+        
+        Important Points:
+        - a segment is essentially just a subarray in the range [l, r] where l <= r
+        - the max difference in each subarray must be <= k
+        
+        Naive Approach:
+        Check all the subarrays and count those with max diff <= k
+            - time complexity: O(n^2) [# of subarrays] * O(n) [iterate over each subarray for checking the max diff]
+                                = O(n^3)
+            - space complexity: O(1)
+            
+        Optimized Solution:
+        Sort the input array "weights" then we have [1, 2, 2, 4, 5]
+        - we know that the max(weights[i:j]) - min(weights[i:j]) <= k,
+          and that means for any valid index i, 
+          we can find another valid index j (j >= i) where weights[j] - weights[i] <= k using binary search
+          => find the index j farthest from the first index (0) where weights[j] - weight[0] <= k using binary search
+          
+        - add the # of subarrays starting from i in [i, j] using the following method and add it to the counter:
+          => # of subarrays in [i, j] where each subarray always starts from i: j-i+1
+          => this operation takes a constant time (O(1))
+          
+         - use a sliding window techique to count the # of subarrays meeting the constraint in a linear scan
+           => move the starting index by 1 at a time and find the next j for the shifted i
+              by expanding the current window to the right
+           => count the # of subarrays starting from the current i using the above method and repeat this process
+              for each index i
+          
+          e.g. weights = [1, 2, 2, 4, 5], k = 3
+         
+           0     3
+          [1,2,2,4] => 4
+           1     4
+          [2,2,4,5] => 4
+           2   4
+          [2,4,5] => 3
+           3 4
+          [4,5] => 2
+           4
+          [5] => 1
+          
+          => 1 + 2 + 3 + 4 + 4 = 14
+          
+        - Time Complexity: O(nlogn) [sorting the array] 
+                           + O(logn) [finding the initial position of j]
+                           + O(n) [sliding window to count the # of subarrays for each i]
+                           = O(nlogn)
+        - Space Complexity: O(1)
+        - Correctness:
+            1. since we count the # of subarrays starting with each index i,
+               we know that we are counting all the possbile subarrays
+               (the valid subarrays are always a subset of the entire subarrays)
+            2. for each index i and another index j (j >= i) where weights[j] is the greatest possible index
+               that makes weights[j] - weights[i] <= k,
+               we any indices in [i, j] would always make the subarrays meet the constraint since weights is SORTED 
+    */
+    
+    static int numOfSegmentsWithMaxDiffAtMostK(int[] weights, int k) {
+        Arrays.sort(weights);
+        
+        int windowStart = 0, windowEnd = 0;
+        int l = 0, r = weights.length-1;
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+            int diff = weights[mid] - weights[0];
+            if (diff <= k) {
+                windowEnd = Math.max(windowEnd, mid);
+                l = mid + 1; // search the right side to find the max windowEnd
+            } else { // diff > k
+                r = mid - 1;
+            }
+        }
+        
+        int count = 0;
+        while (windowStart < weights.length) {
+            count += windowEnd - windowStart + 1;
+            
+            windowStart++;
+            while (
+                windowEnd < weights.length-1
+                && weights[windowEnd] - weights[windowStart] <= k
+            ) {
+                windowEnd++;
+            }
+        }
+        
+        return count;
+    }
+}
