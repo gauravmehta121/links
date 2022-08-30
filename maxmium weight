@@ -1,0 +1,14 @@
+public int getHeaviest(int[] weights)
+    {
+        // Your code here
+        int n = weights.length;
+        int maxWeight = weights[n-1];
+        for(int i = n-2; i >= 0; i--) {
+            // Check if merging is possible or not
+            if(weights[i] < weights[i+1]) {
+                weights[i] += weights[i+1];
+            }
+            maxWeight = Math.max(maxWeight, weights[i]);
+        }
+        return maxWeight;
+    }
