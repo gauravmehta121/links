@@ -1,0 +1,18 @@
+	// Maintaining a forward sum and backward sum vector.
+	vector<int>forwardSum, backwardSum;
+	forwardSum.push_back(0);
+	backwardSum.push_back(0);
+	for (int i = 0; i < temp.size(); i++) {
+		forwardSum.push_back(temp[i] + forwardSum.back());
+	}
+	for (int i = temp.size() - 1; i >= 0; i--) {
+		backwardSum.push_back(temp[i] + backwardSum.back());
+	}
+	int ans = INT_MIN;
+	for (int i = 1; i <= temp.size(); i++) {
+
+		// Getting the maximum value for ith index using forwardSum and backwardSum.
+		ans = max(ans, max(forwardSum[i], backwardSum[backwardSum.size() - i]));
+	}
+	return ans;
+}
