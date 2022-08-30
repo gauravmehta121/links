@@ -1,0 +1,22 @@
+public static int minimumKeypadClickCount (String text)
+{
+    // convert the leftkeypad to int array
+    // For getting 'a', we need to press 1 one time (1), for 'b', we need to press 1 two times (2), for 'c', we need to press 1 three times (3), and so on.
+    int[] leftkeypad = new int[]{1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2};
+        
+    // convert the right keypad to int array
+    // For getting 'a', we need to press 1 one time (1), for 'b', we need to press 2 one time (1), for 'c', we need to press 3 one time (1), and so on.
+    int[] rightkeypad = new int[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3};
+        
+    int count_leftkeypad = 0;
+    int count_rightkeypad = 0;
+        
+    for(int i = 0; i < text.length(); i++)
+    {
+        int tmp = text.charAt(i) - 'a';
+        count_leftkeypad = count_leftkeypad + leftkeypad[tmp];
+        count_rightkeypad = count_rightkeypad + rightkeypad[tmp];
+    }
+        
+    return Math.min(count_leftkeypad, count_rightkeypad);
+}
