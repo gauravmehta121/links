@@ -1,0 +1,15 @@
+public int minTurns(int m, int n, String s) {
+ int ans = 0;
+ int startIndex = 0;
+ int total = s.length();
+ while(startIndex!=0 || ans==0) {
+  startIndex-=m;
+  if(startIndex<0) startIndex+=total;
+  ans++;
+  if(startIndex==0) break;
+  startIndex-=n;
+  if(startIndex<0) startIndex+=total;
+  ans++;
+ }
+ return ans;
+}
