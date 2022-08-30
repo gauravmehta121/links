@@ -1,0 +1,23 @@
+public int findMiddleMaximumCapacity(int[] arr) {
+        int n = arr.length, maxMiddle = -1;
+        Map<Integer, Set<Integer>> map = new HashMap<>();
+        for (int i = n - 1; i >= 0; i--) {
+            boolean found = false;
+            for (int j: map.keySet()) {
+                if (j % arr[i] == 0) {
+                    boolean foundMiddle = false;
+                    for (int k: map.get(j)) {
+                        if (k % arr[i] == 0) {
+                            maxMiddle = Math.max(maxMiddle, k); 
+                            foundMiddle = true;
+                            break;
+                        }
+                    }
+                    if (!foundMiddle && !found) map.get(j).add(arr[i]);
+                    found = true;
+                } 
+            }
+            if (!found) map.put(arr[i], new HashSet<>());
+        }
+        return maxMiddle;
+    }
