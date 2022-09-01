@@ -117,3 +117,27 @@ int findDataLocations(int locations[], int movedFrom[], movedTo[])
     beingactual@gmail.com
 */
 
+    
+    
+    
+    int [] findDataLocations(int[]locations,int moveFrom[],int [] moveto)
+	{
+		TreeSet<Integer> set=new TreeSet<>();
+		for(int i=0;i<locations.length;i++)
+		{
+			set.add(locations[i]);
+		}
+		for(int i=0;i<moveFrom.length;i++)
+		{
+			set.remove(moveFrom[i]);
+			set.add(moveto[i]);
+		}
+		int [] res=new int[locations.length];
+		int index=0;
+		for(Integer k:set)
+		{
+			res[index++]=k;
+			//System.out.print(k+" ");
+		}
+		return res;
+	}
