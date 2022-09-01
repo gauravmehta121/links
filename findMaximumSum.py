@@ -67,6 +67,28 @@ def findMaximumSum(stockPrice, k):
     # Write your code here
     suml=[]
     for i in range(0,len(stockPrice)-k):
+        
+        
+        
+        
+        
+        
+        private int solve(int[] A, int k){
+    int ans = 0;
+    var map = new HashMap<Integer, Integer>();
+    for (int i = 0, sum = 0; i < A.length; i++){
+        map.merge(A[i], 1, Integer::sum);
+        sum += A[i];
+        if (i >= k && map.merge(A[i-k], -1, Integer::sum) == 0){
+            map.remove(A[i-k]);
+            sum -= A[i-k];
+        }
+        if (i >= k-1 && map.size() == k){
+            ans = Math.max(ans, sum);
+        }
+    }
+    return ans;
+}
         if(len(set(stockPrice[i:i+k]))==k):
             suml.append(sum(stockPrice[i:i+k]))
         
