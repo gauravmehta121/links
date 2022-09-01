@@ -1,0 +1,40 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+int deliver(vector<int> &vt, int k){
+
+    sort(vt.begin(), vt.end());
+
+    if(k == vt.size()){
+        return 0;
+    }
+
+    int sum = 0;
+    int j=0;
+    int c=1;
+    int i = k - vt.size() ;
+
+    while(i){
+        if(c == vt[j]){
+            j++;
+            c++;
+        }
+        else
+        {
+            sum += c;
+            c++;
+            i--;
+        }  
+    }
+
+    return sum;
+}
+
+int main(){
+
+    vector<int> vt = {6,5,4,1,3};
+    int k=7;
+    cout<<deliver(vt, k);
+    return 0;
+}
