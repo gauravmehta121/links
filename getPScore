@@ -1,0 +1,55 @@
+public class Solution {
+    public long getPScore(String username1,String username2, int p){
+        int[] map = new int[26];
+        for(int i=0;i<username2.length();i++) map[username2.charAt(i)-'a']++;
+        List<String> pIntervalString = new ArrayList<>();
+        for(int i=0;i<Math.min(p,username1.length());i++){
+            StringBuilder s = new StringBuilder();
+            for(int j=i;j<username1.length();j=j+p) s.append(username1.charAt(j));
+            pIntervalString.add(s.toString());
+        }
+        long answer = 0L;
+        for(String s: pIntervalString) answer += getPScoreForOneString(s,map,username2.length());
+        return answer;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Solution().getPScore("acaccaa","aac",2));
+    }
+    private long getPScoreForOneString(String s, int[] username2Map,int len){
+        //Do a simple sliding window to check numberOf windows which have same character freq as of username2. 
+       //But this will take 26 calculations for each window.... Can any one give a O(1) approach here
+    }
+}
+
+
+
+
+
+private static int solve(String a, String b, int p){
+        int[] count = new int[26];
+        int uniq = 0, ans = 0, n = a.length(), m = b.length();
+        for (char ch : b.toCharArray()){ // count array 
+            if (++count[ch-'a'] == 1){
+                ++uniq;
+            }
+        }
+        for (int i = 0; i < p; i++){ // for each distinct starting position
+            int old = uniq;
+            int[] original = count.clone();
+            for (int j = i; j < a.length(); j += p){ // we go through all the sequence for this distinct start index.
+                if (--count[a.charAt(j) - 'a'] == 0){
+                    --uniq;
+                }
+                if ((j-i)/p+1 > m && ++count[a.charAt(j-m*p) - 'a'] == 1){ // if length is > m, we need to remove the head.
+                    ++uniq; 
+                }
+                if (uniq == 0){ // if there is no more mismatch character, add 1 to ans.
+                    ++ans;
+                }
+            }
+            count = original; // restore it 
+            uniq = old; // restore it.
+        }
+        return ans;
+    }
