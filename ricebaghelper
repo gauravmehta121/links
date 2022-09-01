@@ -1,0 +1,16 @@
+private static int riceBagsHelper(ArrayList<Integer> riceBags) {
+       Collections.sort(riceBags);
+       HashMap<Integer, Integer> map = new HashMap<>();
+       int ans = 1;
+       for(int k = riceBags.size()-1; k >= 0; k--) {
+           int elem = riceBags.get(k);
+           if(map.containsKey(elem*elem)) {
+               int temp = map.get(elem*elem) +1;
+               ans = Math.max(ans, temp);
+               map.put(elem, temp);
+           } else {
+               map.put(elem, 1);
+           }
+       }
+       return ans == 1? -1: ans;
+   }
