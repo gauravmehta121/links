@@ -1,0 +1,11 @@
+private int solve(String s){
+    int cur = 0, ans = 0;
+    for (char ch : s.toCharArray()){
+        if ((cur & 1 << (ch-'a')) > 0){
+            cur = 0;
+            ans++;
+        }
+        cur |= 1 << (ch-'a');
+    }
+    return ++ans;
+}
