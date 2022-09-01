@@ -61,5 +61,49 @@ main()
     if you've cracked the Interview.
 
     beingactual@gmail.com
-
+    
 """
+
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define tests int t; cin >> t; while(t--)
+#define int long long
+
+int util(string s, int i, int count, int prev) {
+    if(count==3) return 1;
+    if(i==s.size()) return 0;
+
+    int temp=0;
+
+    if(prev==1) {
+        if(s[i]=='0') temp+=util(s, i+1, count+1, 0);
+    } else {
+        if(s[i]=='1') temp+=util(s, i+1, count+1, 1);
+    }
+    temp+=util(s, i+1, count, prev);
+
+    return temp;
+}
+
+void solve() {
+    string s;
+    cin >> s;
+
+    cout << util(s, 0, 0, 0)+util(s, 0, 0, 1) << endl;
+}
+
+signed main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    tests{
+        solve();
+    }
+
+    return 0;
+}
