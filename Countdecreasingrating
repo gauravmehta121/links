@@ -1,0 +1,60 @@
+public int addDecreaseSubarray(int day, int[] rate) {
+    int res = 0;
+    for (int i = 0; i < rate.length; i++) {
+        int j = i + 1;
+        while (j < rate.length && rate[j] == rate[j - 1] - 1) {
+            j++;
+        }
+        res += (1 + j - i) * (j - i) / 2;
+        i = j - 1;
+    }
+    return res;
+} 
+
+
+
+
+
+
+void solve() {
+    int n;
+    cin >> n;
+
+    vector<int> ratings(n);
+    for(int i=0; i<n; i++) cin >> ratings[i];
+
+    vector<int> lens;
+    int l=0;
+    int prev=ratings[0];
+    for(int r=0; r<n+1; r++) {
+        if(r==n) {
+            lens.push_back(r-l);
+        } else {
+            if(ratings[r]<prev) {
+                continue;
+            } else {
+                lens.push_back(r-l);
+                while(l!=r) l++;
+                prev=ratings[l];
+            }
+        }
+    }
+
+    int totalCount=0;
+    for(auto len:lens) {
+        totalCount+=len*(len+1)/2;
+    }
+
+    cout << totalCount << endl;
+}
+
+signed main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    tests {
+        solve();
+    }
+
+    return 0;
+}
