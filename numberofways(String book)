@@ -1,0 +1,11 @@
+private static int solve(String s){
+        int[][] dp = new int[2][4]; // [ending digit, length]
+        dp[0][0] = dp[1][0] = 1; // base case
+        for (char ch : s.toCharArray()){
+            for (int i = 0, j = ch-'0'; i < 3; i++){
+                dp[j][i+1] += dp[j^1][i]; // transitions
+            }
+        }
+
+        return dp[0][3] + dp[1][3];
+    }
