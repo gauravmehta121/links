@@ -37,3 +37,29 @@ NOTE:
     I would love to hear from you if you've cracked the Interview.
     beingactual@gmail.com
 */
+
+
+public static int minMoves(int [] plates , int n){
+
+        int min = Integer.MAX_VALUE;
+        int minIndex= 0 , maxIndex = 0;
+        int max = Integer.MIN_VALUE;
+        for(int i = 0 ; i< n  ; i++ ){
+            if(min > plates[i]){
+                min= plates[i];
+                minIndex = i; 
+            }
+            if(max < plates[i]){
+                max = plates[i];
+                maxIndex = i;
+            }
+        }
+       
+        if(minIndex<maxIndex){     // simply we calculate the distance for both the points--> for min swaps would be (min - 0) + and for max (length-1-max)
+            return (minIndex + n-1 - maxIndex);
+        }
+        else{
+            return ( n-1- maxIndex + minIndex -1 );     
+        }
+       
+        }
